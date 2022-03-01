@@ -1,3 +1,2 @@
-# DMTools
-Tool suite to streamline Ur project of DNA modification.  
+# DDTools 
 In testing.
