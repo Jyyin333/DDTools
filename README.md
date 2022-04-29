@@ -3,7 +3,7 @@
 DDTools是一款基于Python编写的、用于结合末端标记法策略的二代测序相关数据的分析工具  
 包含项目构建、数据质控、数据分析和图形展示等多个功能模块，可以帮助用户实现对数据的快速处理
 
-![DDTools modules](.\figures\ddtools_modules.png)
+![DDTools modules](./figures/ddtools_modules.png)
 
 ## DDTools的下载与安装
 目前，用户可以通过下载本页面中的源码，通过```python setup.py install```安装使用  
