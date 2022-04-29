@@ -10,8 +10,7 @@ DDTools是一款基于Python编写的、用于结合末端标记法策略的二�
 未来，也计划将DDTools上传至PyPi，届时可通过pip的方式直接下载
 
 ## DDTools presentation
-接下来以一套CLAPS-seq的数据为例，演示DDTools的使用方法及流程，ClAPS-seq是一种用于在全基因组范围内检测8-oxodG氧化损伤的方法  
-原始测序数据来源于[GSE181312](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181312)  
+接下来以一套CLAPS-seq的数据为例，演示DDTools的使用方法及流程，ClAPS-seq是一种用于在全基因组范围内检测8-oxodG氧化损伤的方法，原始测序数据来源于[GSE181312](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181312)  
 由于文件大小限制问题，本页面无法将原始及中间文件进行分享，请按照个人情况自行下载
 
 | FILE | DESCRIPTION |
@@ -49,8 +48,8 @@ DDTools是一款基于Python编写的、用于结合末端标记法策略的二�
 │	└── claps-seq-vivo-rep1_R2.fastq.gz
 │
 └── claps-seq-input
-    ├── claps-seq-input_R1.fastq.gz
-    └── claps-seq-input_R2.fastq.gz
+	├── claps-seq-input_R1.fastq.gz
+	└── claps-seq-input_R2.fastq.gz
 ```
 ```bash
 ddtools makeProject --project_name proj-test \
