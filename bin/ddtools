@@ -82,13 +82,6 @@ Good luck !
 	return parser
 
 
-#####################
-# 2022/4/11
-# To be modified
-#	if keepbase == ACGT
-#	skip re-generate bedfile
-#####################
-
 
 def test_parser():
 
@@ -147,6 +140,7 @@ def makeProject():
 	parser.add_argument('--run', action='store_true', help='If this parameter is specified, then the upstream analysis starts as soon as the snakefile is generated')
 	
 	return parser
+	
 
 
 def convertoBed():
@@ -223,11 +217,15 @@ def computeMTX():
 	In the first mode, the signal values of the flanking area are calculated by centering on the reference point specified by user.
 	In the second mode, there are two reference points(e.g. TSS and TES), and the area between them is first scale to the same length, and then the signal value is calculated.
 
-	An example usage:
-		$ ddtools computeMTX -m refpoint --reference_point TSS -i input.bed -g genome.2bit -f genome.fa -r region.bed -o result.mtx.gz
-		or
-		$ ddtools computeMTX -m scale -i input.bed -g genome.2bit -f genome.fa -r region.bed -o result.mtx.gz
+	Alternatively, if "--bed" not specified and "--genome2bit" is specified, the program will count the base of specified type instead of signal.
 
+	An example usage:
+		$ ddtools computeMTX -m refpoint --reference_point TSS -i input.bed -k G -f genome.fa -r region.bed -o result.mtx.gz
+		
+		$ ddtools computeMTX -m scale -i input.bed -f genome.fa -k G -r region.bed -o result.mtx.gz
+
+		$ ddtools computeMTX -m refpoint --reference_point TSS -g genome.2bit -k G -r region.bed -o result.mtx.gz
+		
 	''', formatter_class=argparse.RawDescriptionHelpFormatter, add_help=True)
 
 	# exclusive params 
@@ -250,11 +248,11 @@ def computeMTX():
 	# optional params
 	OPTIONAL = parser.add_argument_group('Universal', 'Parameters in this section are shared by different Running-Module.')
 
-	OPTIONAL.add_argument('-k', '--keep_bases', metavar='BASES', type=str, nargs='+', default='G', help=
+	OPTIONAL.add_argument('-k', '--keep_bases', default=['A','G','C','T'], type=str, nargs='+', help=
 		'Reads with specific base-type at damage site were keeped while others were discarded.'
 		'Multiple types can be specified, but the length needs to be consistent.'
 		'For example: "-k G C" or "-k TT TC", while "-k G GC" is not allowed.'
-		'(default: %(default)s)')
+		'(default: %(default)s')
 
 	OPTIONAL.add_argument('-u', '--upstream', type=int, default=2000, help='Distance upstream of the reference point [bp].')
 
@@ -301,7 +299,7 @@ def regAnnotation():
 
 	parser.add_argument('-r', '--anno_file', required=True, help='Annotation file with BED format.')
 
-	parser.add_argument('-k', '--keep_bases', default='G', type=str, nargs='+', help=
+	parser.add_argument('-k', '--keep_bases', default=['A','G','C','T'], type=str, nargs='+', help=
 		'Reads with specific base-type at damage site were keeped while others were discarded.'
 		'Multiple types can be specified, but the length needs to be consistent.'
 		'For example: "-k G C" or "-k TT TC", while "-k G GC" is not allowed.'
@@ -330,11 +328,11 @@ def computeGbias():
 
 	parser.add_argument('-i', '--bed', nargs='+', required=True, help='Sample BED file with .tbi index.')
 
-	parser.add_argument('-k', '--keep_bases', default='G', type=str, nargs='+', help=
+	parser.add_argument('-k', '--keep_bases', default=['A','G','C','T'], type=str, nargs='+', help=
 		'Reads with specific base-type at damage site were keeped while others were discarded.'
 		'Multiple types can be specified, but the length needs to be consistent.'
 		'For example: "-k G C" or "-k TT TC", while "-k G GC" is not allowed.'
-		'(default: %(default)s)')
+		'(default: %(default)s')
 
 	parser.add_argument('-c', '--control', default=None, help=
 		'Bed file of control group. Only one sample could be specified.')
