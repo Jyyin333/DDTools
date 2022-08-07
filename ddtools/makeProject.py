@@ -366,7 +366,7 @@ def main(args=None):
 	'threads',
 	'5',
 	'shell',
-	'''"java -Xmx40g -jar {picard} MarkDuplicates -I {input} -O {output.bam} --METRICS_FILE {output.metrics} --REMOVE_DUPLICATES true --ASSUME_SORTED true --CREATE_INDEX true --VALIDATION_STRINGENCY SILENT"'''
+	'''"java -Xmx40g -jar {picard} MarkDuplicates -I {input.bam} -O {output.bam} --METRICS_FILE {output.metrics} --REMOVE_DUPLICATES true --ASSUME_SORTED true --CREATE_INDEX true --VALIDATION_STRINGENCY SILENT"'''
 	]
 	mysnake.constructBlock('Dedup', dedup_list)
 
@@ -382,7 +382,7 @@ def main(args=None):
 	'threads',
 	'5',
 	'shell',
-	'''"java -Xmx20g -jar {picard} CollectMultipleMetrics -I {input} -O {output} -R {GENOME_FA}"'''
+	'''"java -Xmx20g -jar {picard} CollectMultipleMetrics -I {input.bam} -O {params.prefix} -R {GENOME_FA}"'''
 	]
 	mysnake.constructBlock('collectMultipleMetrics', cmm_list, collect=True)
 
