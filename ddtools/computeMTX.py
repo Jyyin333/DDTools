@@ -376,10 +376,10 @@ def scale_main(params_dict, REGION_LIST):
 
 
 
-
 def main(args=None):
 	
 	# load params and choose which mode_wrapper to run
+	info('Loading data...', 'out')
 	regionfile = transferPath(args.region)
 	mode = args.mode
 	bedfile = args.bed # mutual exclusive
@@ -426,12 +426,7 @@ def main(args=None):
 	passing_dict['bedfile'] = bedfile
 
 
-	# quickly check bedifle
-	##############################
-	## 2022/4/9
-	## to be tackled
-	## input bedfile must be in bgzip format and has tbi index
-	##############################
+	# quickly check if bedfile is valid
 	if bedfile != None:
 		bedfile = transferPath(bedfile)
 		total_counts = 0
@@ -491,6 +486,7 @@ def main(args=None):
 	## and total length must be divisble by binsize 
 	############################
 	if mode == 'refpoint':
+		info('The mode you selected is "refpoint"', 'out')
 		try:
 			assert stepsize <= binsize
 		except AssertionError:
@@ -498,6 +494,12 @@ def main(args=None):
 			stepsize = binsize
 		except TypeError:
 			stepsize = binsize
+
+		try:
+			assert binsize % stepsize == 0
+		except:
+			info('BinSize {:.0f} is not divisble by StepSize {:.0f}'.format(binsize, stepsize), 'error')
+			sys.exit()
 
 		passing_dict['rp'] = rp
 		passing_dict['stepsize'] = stepsize
@@ -507,7 +509,9 @@ def main(args=None):
 		# REGION_LIST = [ ['chr1',10,'+'], ...]
 
 		# run refpoint main procedure
+		info('Start run refpoint precedure ...', 'out')
 		DF, res_params_Dict = refpoint_main(passing_dict, REGION_LIST)
+		info('Saving results...', 'out')
 
 		# write out
 		headerLine = {
@@ -538,6 +542,7 @@ def main(args=None):
 
 	# procedure : scale mode
 	if mode == 'scale':
+		info('The mode you selected is "scale"', 'out')
 
 		try:
 			assert bodylength != None
@@ -551,7 +556,9 @@ def main(args=None):
 		info(filter_info)
 
 		# run scale main procedure
+		info('Start run scale precedure ...', 'out')
 		DF, res_params_Dict = scale_main(passing_dict, REGION_LIST)
+		info('Saving results...', 'out')
 
 		# write out
 		headerLine = {
@@ -578,6 +585,7 @@ def main(args=None):
 		DF.to_csv(res_params_Dict.get('output'), sep='\t', header=False, index=False, mode='ab', compression='gzip', encoding='utf-8')
 
 
+	info('{} Done.'.format(os.path.basename(bedfile)), 'out')
 
 if __name__ == '__main__':
 	main()

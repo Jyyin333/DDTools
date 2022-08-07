@@ -126,7 +126,9 @@ def _preprocessing_singlesample(mtx, ref_label, scale_label, pt='line'):
 
 def split_plot(nrow, ncol, treatGroup, controlGroup=None):
 
-	fig = plt.figure()
+	figsize_x = ncol * 2.2
+	figsize_y = nrow * 1.5
+	fig = plt.figure(figsize=(2.5+figsize_x, 3+figsize_y))
 	gs = gridspec.GridSpec(nrow, ncol, figure=fig)
 
 	# set layout
@@ -203,7 +205,7 @@ def split_plot(nrow, ncol, treatGroup, controlGroup=None):
 
 def merge_plot(treatGroup, controlGroup=None):
 
-	fig = plt.figure()
+	fig = plt.figure(figsize=(6, 5))
 	gs = gridspec.GridSpec(1, 2, figure=fig)
 	
 	# set layout

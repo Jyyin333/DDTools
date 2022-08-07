@@ -226,6 +226,7 @@ def main(args=None):
 	if resort:
 		try:
 			assert sorted(resort) == sort_keys
+			sort_keys = resort
 		except AssertionError:
 			info()
 			sys.exit()

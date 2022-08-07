@@ -47,7 +47,7 @@ def _groupByLastBase(indict):
 		# range: 0.5 - 1.5
 		# step of groups: 1.5
 		# width: 0.3
-		width: 0.3
+		width = 0.3
 		base_ticks = np.linspace(0.5, 1.5, 4)
 		for i in range(4):
 			res_ticks.extend(list(base_ticks + i*1.5))
@@ -67,7 +67,7 @@ def _groupByLastBase(indict):
 		# range: 0.5 - 2.5
 		# step of groups: 3
 		# width: 0.24
-		width: 0.24
+		width = 0.24
 		base_ticks = np.linspace(0.5, 2.5, 8)
 		for i in range(4):
 			res_ticks.extend(list(base_ticks + i*2.5))
@@ -161,7 +161,7 @@ def plot_mono(infile, outfile, figType, lb, rb, title):
 		ax.set_ylabel('% Percentage', fontdict=LabelFont('label'))
 		ax.set_yticks([0, .2, .4, .6, .8, 1])
 		ax.set_yticklabels([str(j) + '%' for j in [int(i*100) for i in [0, .2, .4, .6, .8, 1]]], fontdict=LabelFont('tick'))
-		ax.grid(axis='y', lw=1.5, color='grey', zorder=1)
+		ax.grid(axis='y', ls='-', lw=1.5, color='grey', zorder=1)
 		ax.set_title(title, fontdict=LabelFont('title'), pad=10)
 
 		plt.savefig(outfile, dpi=300, bbox_inches='tight')
@@ -281,7 +281,7 @@ def plot_tri(infile, outfile, tokeep, title, cfile=None):
 	if cfile:
 		cDict = _filereading(cfile)
 		cfkeys = [x for x in cDict.keys() if x[1] in tokeep]
-		c_total = sum([triDict.get(i) for i in cfkeys])
+		c_total = sum([cDict.get(i) for i in cfkeys])
 
 		try:
 			assert len(set(fkeys) - set(cDict.keys())) == 0
@@ -318,7 +318,8 @@ def plot_tri(infile, outfile, tokeep, title, cfile=None):
 
 		fig_yticks = list(ax.get_yticks())
 		ax.set_ylim(fig_yticks[0], fig_yticks[-1])
-		ax.set_yticks(fig_yticks, fontdict=LabelFont('tick'))
+		ax.set_yticks(fig_yticks)
+		ax.set_yticklabels(fig_yticks, fontdict=LabelFont('tick'))
 
 		ax.grid(axis='y', lw=1, color='grey', zorder=1)
 		ax.set_title(title, fontdict=LabelFont('title'), pad=10)
@@ -423,6 +424,14 @@ def main(args=None):
 	'keep_bases':keep_bases
 	}
 	'''
+
+
+
+	##############
+	# 2022/5/3
+	# to be modified
+	# 检查此处读入文件的keepbases和参数keepbase是否包含关系
+	###############
 
 	params_dict = readHeader(seqFile)
 	seqType = params_dict.get('type')

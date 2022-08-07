@@ -348,7 +348,13 @@ def get_base_content(chrom, start, end, tbit, fraction=True, base = 'G'):
 			sys.stderr.write('Invalid base type.\n')
 			return None
 
-	bases = tbit.bases(chrom, start, end, fraction=False)
+	try:
+		bases = tbit.bases(chrom, start, end, fraction=False)
+	except RuntimeError:
+		return 0
+	except:
+		return 0
+
 	if end > tbit.chroms(chrom):
 		end = tbit.chroms(chrom)
 	if sum(bases.values()) < 0.95 * (start - end):
@@ -418,7 +424,12 @@ def bedCountsinRegion(tbx, chrom, start, end, totalCounts=None, normlizeMethod=N
 
 	p, m = 0, 0
 	tile_length = abs(end - start)
-	records = tbx.fetch(chrom, start, end)
+	try:
+		records = tbx.fetch(chrom, start, end)
+	except ValueError as ve:
+		info(ve,'error')
+		return 0, 0
+
 	for read in records:
 
 		if read.strand == '+':
@@ -571,7 +582,9 @@ def process_regions(params_dict, mode):
 			res.append([chrom, strand, up_region, mid_region, down_region])
 
 
-	filter_info = 'Of total {:.0f} input regions, {:.0f} were discarded because of out of range.'.format(totalCounts, nFaileds)
+	filter_info = 'Total regions: {:.0f}'.format(totalCounts)
+	if nFaileds > 0:
+		filter_info = 'Of total {:.0f} input regions, {:.0f} were discarded because of out of range.'.format(totalCounts, nFaileds)
 
 	return res, filter_info
 
@@ -694,6 +707,7 @@ def filterBed(bedfile, ref_fa, output, keep_bases):
 
 	time.sleep(5)
 	os.system(tabix_cmd)
+	time.sleep(10)
 
 	tmpfile_list = [bgziped_file, output+'.gz.tbi']
 

@@ -128,6 +128,13 @@ def makeSampleList(dirname, namelist):
 			with gzip.open(collect['fastq'][sm]['Read1']) as fi:
 				index = fi.readline().decode().rstrip().split(':')[-1]
 
+	########################
+	# 4.20
+	# to be modified
+	# if fastq files are downloaded from GEO
+	# some keys within this dict may not applicable
+	########################
+
 		collect['samples'][sm] = {}
 		collect['samples'][sm]['id'] = sm
 		collect['samples'][sm]['lb'] = namelist.get('library')
@@ -425,7 +432,7 @@ def main(args=None):
 
 	info('Generate DAG.')
 	# generate DAG
-	dryrun = 'snakemake -s {} --dag |dot --Tsvg > {}'.format(
+	dryrun = 'snakemake -s {} --dag |dot -Tsvg > {}'.format(
 		snakefile, snakefile+'.svg')
 	os.system(dryrun)
 	time.sleep(10)

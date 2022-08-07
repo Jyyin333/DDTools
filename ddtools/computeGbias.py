@@ -97,6 +97,7 @@ def computeG_worker(chrom, start, end, stepsize, regionsize, treatGroups, tbit_f
 def main(args=None):
 
 	# loading params
+	info('Loading data...', 'out')
 	samplesize = args.samplesize
 	regionsize = args.regionsize
 	cores = args.cores
@@ -134,6 +135,7 @@ def main(args=None):
 
 
 	# generate tmp bed file
+	info('Generate temp file ...', 'out')
 	ref_fa = Fasta(transferPath(args.genomefasta))
 	keep_bases = args.keep_bases
 	# tmp_bedfiles: a list of new bedfiles name with suffix of random string
@@ -142,6 +144,7 @@ def main(args=None):
 	tmp_bedfiles_list = [filterBed(bedfiles[i], ref_fa, tmp_bedfiles[i], keep_bases) for i in range(nSamples)]
 	ref_fa.close()
 
+	info('Calculating ...', 'out')
 	inputBeds = [x[0] for x in tmp_bedfiles_list]
 	# running main procedure
 	JOBS = []
@@ -182,6 +185,8 @@ def main(args=None):
 	for f in tmp_bedfiles_list:
 		os.remove(f[0])
 		os.remove(f[1])
+
+	info('{} Done.'.format(os.path.basename(bedfile)), 'out')
 
 if __name__ == '__main__':
 	main()

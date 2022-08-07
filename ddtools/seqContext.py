@@ -63,12 +63,16 @@ def filter_seqs(seqList, region_size, left_bias, keep_bases):
 	bases_length = len(keep_bases[0])
 
 	for seq in seqList:
+
 		if len(seq) != region_size:
 			continue
+
 		if bases_length == 2 and seq[left_bias-1:left_bias+1] not in keep_bases:
 			continue
+
 		if bases_length == 1 and seq[left_bias:left_bias+1] not in keep_bases:
 			continue
+
 		else:
 			res.append(seq)
 
@@ -109,7 +113,7 @@ def getSeqs(contig, region_start, region_end, left_bias, right_bias, keep_bases)
 			try:
 				sequence = sequence.seq.upper()
 			except ValueError:
-				print('seq: {}\t{}:{}-{}'.format(sequence,chrom,re_start,re_end))
+				print('Invalid seq: {}\t{}:{}-{}'.format(sequence,chrom,re_start,re_end))
 				continue
 
 			if sequence.count('N'):
@@ -129,7 +133,7 @@ def getSeqs(contig, region_start, region_end, left_bias, right_bias, keep_bases)
 			try:
 				sequence = sequence.reverse.complement.seq.upper()
 			except ValueError:
-				print('seq: {}\t{}:{}-{}'.format(sequence,chrom,re_start,re_end))
+				print('Invalid seq: {}\t{}:{}-{}'.format(sequence,chrom,re_start,re_end))
 				continue
 
 			if sequence.count('N'):
@@ -309,10 +313,9 @@ def main(args=None):
 	# some contigs in ref_fa were not in contigs
 	#
 	trim_contigs = set(ref_fa.keys()) - set(contigs)
+
 	#####
 	# cut genome into chunk
-	
-
 	info('Cutting genome into chunks.', 'out')
 	REGIONS = cutGenome(ref_fa, trim_contigs)
 
@@ -328,7 +331,7 @@ def main(args=None):
 	pool.join()
 
 
-	info('Getting sequences done.', 'out')
+	info('Collecting sequences done.', 'out')
 
 	seqMelt = [x for sub in res for x in sub]
 

@@ -17,7 +17,7 @@ def _process_region(tbx, tbit, line, colors_dict):
 	start = int(line[1])
 	end = int(line[2])
 	feature_type = line[3]
-	strand = line[5]
+	#strand = line[5]
 	try:
 		color = line[8]
 	except:
@@ -53,6 +53,7 @@ def _process_region(tbx, tbit, line, colors_dict):
 
 def main(args=None):
 
+	info('Loading data...', 'out')
 	# check input bed
 	bedfile = args.bed
 	if bedfile != None:
@@ -70,14 +71,14 @@ def main(args=None):
 		except OSError as oe:
 			info(oe, 'error')
 
-	# quickly check input region
+	# quickly check input regions
 	anno_file = transferPath(args.anno_file)
 	if anno_file.endswith('.gz') or anno_file.endswith('.bgz'):
 		fi = gzip.open(anno_file)
 		subtract_test = [fi.readline().decode().strip() for _ in range(1000)]
 		fi.close()
 	else:
-		fi = open('anno_file')
+		fi = open(anno_file)
 		subtract_test = [fi.readline().strip() for _ in range(1000)]
 		fi.close()
 
@@ -90,6 +91,7 @@ def main(args=None):
 		sys.exit()
 
 
+	info('Generate temp file ...', 'out')
 	# generate tmp bed file
 	ref_fa = Fasta(transferPath(args.genomefasta))
 	tbit = py2bit.open(transferPath(args.genome2bit))
@@ -105,6 +107,8 @@ def main(args=None):
 	outfile = transferPath(args.output)
 	fo = open(outfile, 'w')
 	colors_dict = {}
+
+	info('Writing ...', 'out')
 
 	if anno_file.endswith('.gz') or anno_file.endswith('.bgz'):
 
@@ -157,6 +161,8 @@ def main(args=None):
 	# remove tmp bedfile
 	for f in tmpfile_list:
 		os.remove(f)
+
+	info('{} Done.'.format(os.path.basename(bedfile)), 'out')
 
 
 if __name__ == '__main__':
